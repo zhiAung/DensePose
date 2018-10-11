@@ -466,6 +466,7 @@ __C.MODEL.KEYPOINTS_ON = False
 # Indicates the model makes body UV predictions (as in DensePose R-CNN)
 __C.MODEL.BODY_UV_ON = False
 
+__C.MODEL.CASCAD_ON =False
 # Indicates the model's computation terminates with the production of RPN
 # proposals (i.e., it outputs proposals ONLY, no actual object detections)
 __C.MODEL.RPN_ONLY = False
@@ -474,6 +475,26 @@ __C.MODEL.RPN_ONLY = False
 # Use 'prof_dag' to get profiling statistics
 __C.MODEL.EXECUTION_TYPE = b'dag'
 
+__C.MODEL.ALLOW_INPLACE_RESHAPE = True
+
+# Non-local Block
+__C.NONLOCAL = AttrDict()
+__C.NONLOCAL.CONV_INIT_STD = 0.01
+__C.NONLOCAL.NO_BIAS = 0
+__C.NONLOCAL.USE_MAXPOOL = True
+__C.NONLOCAL.USE_SOFTMAX = True
+__C.NONLOCAL.USE_ZERO_INIT_CONV = False
+__C.NONLOCAL.USE_BN = True
+__C.NONLOCAL.USE_SCALE = True
+__C.NONLOCAL.USE_AFFINE = False
+
+__C.NONLOCAL.BN_MOMENTUM = 0.9
+__C.NONLOCAL.BN_EPSILON = 1.0000001e-5
+__C.NONLOCAL.BN_INIT_GAMMA = 0.0
+
+__C.NONLOCAL.LAYER_MOD = 2
+__C.NONLOCAL.CONV3_NONLOCAL = True
+__C.NONLOCAL.CONV4_NONLOCAL = True
 
 # ---------------------------------------------------------------------------- #
 # RetinaNet options
@@ -898,6 +919,58 @@ __C.BODY_UV_RCNN.POINT_REGRESSION_WEIGHTS = 0.001
 # Train only with images that have body uv annotations
 __C.BODY_UV_RCNN.BODY_UV_IMS = False
 
+# ---------------------------------------------------------------------------- #
+# cascading_keypoint options
+# ---------------------------------------------------------------------------- #
+__C.CASCAD_BODY_KEYPOINT = AttrDict()
+
+# The type of RoI head to use for body UV prediction
+__C.CASCAD_BODY_KEYPOINT.ROI_CASCAD_HEAD = b''
+
+# Output size (and size loss is computed on), e.g., 56x56
+#__C.CASCAD_BODY_KEYPOINT.HEATMAP_SIZE = -1
+
+# Use bilinear interpolation to upsample the final heatmap by this factor
+#__C.CASCAD_BODY_KEYPOINT.UP_SCALE = -1
+
+# Apply a ConvTranspose layer to the features prior to predicting the heatmaps
+#__C.KRCNN.USE_DECONV = False
+# Channel dimension of the hidden representation produced by the ConvTranspose
+#__C.CASCAD_BODY_KEYPOINT.DECONV_DIM = 256
+# Use a ConvTranspose layer to predict the heatmaps
+__C.CASCAD_BODY_KEYPOINT.USE_DECONV_OUTPUT = False
+# Use dilation in the body UV head
+#__C.CASCAD_BODY_KEYPOINT.DILATION = 1
+# Size of the kernels to use in all ConvTranspose operations
+__C.CASCAD_BODY_KEYPOINT.DECONV_KERNEL = 4
+
+# Number of patches in the dataset
+#__C.CASCAD_BODY_KEYPOINT.NUM_PATCHES = -1
+
+# Number of stacked Conv layers in body UV head
+__C.CASCAD_BODY_KEYPOINT.NUM_STACKED_CONVS = 8
+# Dimension of the hidden representation output by the body UV head
+__C.CASCAD_BODY_KEYPOINT.CONV_HEAD_DIM = 256
+# Conv kernel size used in the body UV head
+__C.CASCAD_BODY_KEYPOINT.CONV_HEAD_KERNEL = 3
+# Conv kernel weight filling function
+__C.CASCAD_BODY_KEYPOINT.CONV_INIT = b'GaussianFill'
+
+# Standard ROI XFORM options (see FAST_RCNN or MRCNN options)
+#__C.CASCAD_BODY_KEYPOINT.ROI_XFORM_METHOD = b'RoIAlign'
+#__C.CASCAD_BODY_KEYPOINT.ROI_XFORM_RESOLUTION = 7
+#__C.CASCAD_BODY_KEYPOINT.ROI_XFORM_SAMPLING_RATIO = 0
+
+# Weights
+#__C.CASCAD_BODY_KEYPOINT.INDEX_WEIGHTS = 5.0
+#__C.CASCAD_BODY_KEYPOINT.PART_WEIGHTS = 1.0
+#__C.CASCAD_BODY_KEYPOINT.POINT_REGRESSION_WEIGHTS = 0.001
+
+# Train only with images that have body uv annotations
+#__C.CASCAD_BODY_KEYPOINT.BODY_UV_IMS = False
+
+
+
 
 # ---------------------------------------------------------------------------- #
 # R-FCN options
@@ -1017,7 +1090,7 @@ __C.EXPECTED_RESULTS_EMAIL = b''
 
 # Models and proposals referred to by URL are downloaded to a local cache
 # specified by DOWNLOAD_CACHE
-__C.DOWNLOAD_CACHE = b'/tmp/detectron-download-cache'
+__C.DOWNLOAD_CACHE = b'/home/xiangyu.zhu/zhiang.hao/DensePose-master/detectron-download-cache/'
 
 
 # ---------------------------------------------------------------------------- #
